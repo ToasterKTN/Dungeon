@@ -1,0 +1,10 @@
+name: Dungeon
+main: com.bukkit.toasterktn.Dungeon.Dungeon
+version: 0.1
+commands: 
+   regeneratechunk:
+      description: Regen a Chunk
+      usage: /<command> [x] [z]
+      aliases: 
+         - regc
+         - cr
