@@ -18,7 +18,7 @@ import com.bukkit.toasterktn.Dungeon.Dungeon;
 import com.bukkit.toasterktn.Dungeon.Config.DungeonConfig;
 
 public class ChunkListener extends WorldListener{
-	public static Dungeon plugin;
+	private static Dungeon plugin;
 	private IChunkProvider scp;
 
 	public ChunkListener(Dungeon instance) {

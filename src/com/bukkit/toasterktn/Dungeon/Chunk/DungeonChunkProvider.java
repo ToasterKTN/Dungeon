@@ -5,7 +5,7 @@ import java.util.Random;
 import com.bukkit.toasterktn.Dungeon.Dungeon;
 import com.bukkit.toasterktn.Dungeon.Config.DungeonConfig;
 import com.bukkit.toasterktn.Dungeon.Generator.Generator;
-import com.bukkit.toasterktn.Dungeon.Thread.DungeonCreateLootThread;
+//import com.bukkit.toasterktn.Dungeon.Thread.DungeonCreateLootThread;
 import net.minecraft.server.BiomeBase;
 import net.minecraft.server.Chunk;
 import net.minecraft.server.IChunkProvider;
@@ -20,7 +20,6 @@ public class DungeonChunkProvider implements IChunkProvider {
     private World p;
     private MapGenBase u = new MapGenCaves();
     private BiomeBase[] v;
-    private Generator gen = null;
     double[] d;
     double[] e;
     double[] f;
@@ -33,19 +32,20 @@ public class DungeonChunkProvider implements IChunkProvider {
 	this.p = world;
 	this.r = new Random(i);
 	this.plugin = instance;
-	gen = new Generator();
-	gen.setSize(DungeonConfig.worldsize, DungeonConfig.worldsize);
-	gen.init(i);
-	gen.makeRooms(DungeonConfig.maxroomsize);
-	gen.makeWays();
-	gen.removedeadend(DungeonConfig.removedeads);
+	plugin.gen = new Generator();
+	plugin.gen.setSize(DungeonConfig.worldsize, DungeonConfig.worldsize);
+	plugin.gen.init(i);
+	plugin.gen.makeRooms(DungeonConfig.maxroomsize);
+	plugin.gen.makeWays();
+	plugin.gen.removedeadend(DungeonConfig.removedeads);
 	try {
-	    gen.setStart();
+	    plugin.gen.setStart();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	gen.chests(DungeonConfig.chestchance);	
-	plugin.getServer().getWorld(DungeonConfig.world).setSpawnLocation(gen.startx,3,gen.starty);
+	plugin.gen.chests(DungeonConfig.chestchance);	
+	plugin.gen.makeSpawns(DungeonConfig.respawntime);
+	plugin.getServer().getWorld(DungeonConfig.world).setSpawnLocation(plugin.gen.startx,3,plugin.gen.starty);
     }
 
   
@@ -67,7 +67,7 @@ public class DungeonChunkProvider implements IChunkProvider {
 		int l1 = (l * 16 + k) * 128;
 		abyte[l1] = (byte) 7;
 		try {
-		   byte bt = gen.dungeon[i * 16 + l][j * 16 + k];
+		   byte bt = plugin.gen.dungeon[i * 16 + l][j * 16 + k];
 		   abyte[(l * 16 + k) * 128 + 1] = 0x2D;
 		   l1 = (l * 16 + k) * 128 + 2;
 		   int l2 = (l * 16 + k) * 128 + 3;
@@ -106,7 +106,7 @@ public class DungeonChunkProvider implements IChunkProvider {
 		   }
 		   if (bt == Generator.chest) {
 		       abyte[l1] = Generator.chest;
-		       plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new DungeonCreateLootThread(plugin,i * 16 + l,2,j * 16 + k),r.nextInt(1200));
+		       //plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new DungeonCreateLootThread(plugin,i * 16 + l,2,j * 16 + k),r.nextInt(1200));
 		   }
 		} catch (Exception e) {
 		   // Nothing todo

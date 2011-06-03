@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.entity.CreatureType;
+
 import com.bukkit.toasterktn.Dungeon.Config.DungeonConfig;
 
 public class Generator {
@@ -21,6 +23,9 @@ public class Generator {
     public byte[][] dunmask = null;
     private Random r = null;
     private List<String> dirs = null;
+    private List<Room> rooms = null; 
+    private List<SpawnPoint> spawns = null; 
+    private List<Treasure> treasures = null;
     public int startx, starty;
 
     public void setSize(int x, int y) {
@@ -28,6 +33,9 @@ public class Generator {
 	this.y = y;
 	this.dungeon = new byte[x][y];
 	this.dunmask = new byte[x][y];
+	this.rooms = new ArrayList<Room>();
+	this.spawns = new ArrayList<SpawnPoint>();
+	this.treasures = new ArrayList<Treasure>();
     }
 
     public void init(long seed) {
@@ -63,7 +71,22 @@ public class Generator {
 	    }
 	}
     }
+    public void makeSpawns(int respawn) {
+	for (Room ro:rooms) {
+	    if (r.nextInt(5)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(), ro.getCenter().getY(), respawn, CreatureType.ZOMBIE, 5));
+	    if (r.nextInt(6)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(), ro.getCenter().getY(), respawn, CreatureType.PIG_ZOMBIE, 5));
+	    if (r.nextInt(5)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(), ro.getCenter().getY(), respawn, CreatureType.SKELETON, 5));
+	    if (r.nextInt(8)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(), ro.getCenter().getY(), respawn, CreatureType.SPIDER, 5));
+	}
+    }
 
+    public List<SpawnPoint> getSpawnPoints() {
+	return this.spawns;
+    }
+    public List<Treasure> getTreasures() {
+	return this.treasures;
+    }
+    
     private boolean hasRoomSpace(int x, int y, int h, int v) {
 	try {
 	    for (int x1 = x -2 ; x1 < x + h +4 ; x1++) {
@@ -79,6 +102,7 @@ public class Generator {
     }
 
     private void placeRoom(int x, int y, int h, int v) {
+	rooms.add(new Room(x, y, h, v, 0));
 	for (int x1 = x; x1 < x + h; x1++) {
 	    for (int y1 = y; y1 < y + v; y1++) {
 		this.dungeon[x1][y1] = free;
@@ -218,56 +242,41 @@ public class Generator {
     }
     private void setChest(int x, int y) {
 	dungeon[x][y] = chest;
+	treasures.add(new Treasure(x, 2, y, DungeonConfig.respawntime));
+    }
+    
+    private boolean istype(int x, int y, byte type) {
+	try {
+	    if (dungeon[x][y] == type)
+		return true;
+	    return false;
+	} catch (Exception e) {
+	    return false;
+	}
     }
     
     private boolean isfreecell(int x, int y) {
-	try {
-	    if (dungeon[x][y] == wall)
-		return true;
-	    return false;
-	} catch (Exception e) {
-	    return false;
-	}
+	return istype(x, y, wall);
     }
     private boolean isroom(int x, int y) {
-	try {
-	    if (dungeon[x][y] == free)
-		return true;
-	    return false;
-	} catch (Exception e) {
-	    return false;
-	}
+	return istype(x, y, free);
     }
     private boolean isway(int x, int y) {
-	try {
-	    if (dungeon[x][y] == way)
-		return true;
-	    return false;
-	} catch (Exception e) {
-	    return false;
-	}
+	return istype(x, y, way);
     }
     @SuppressWarnings("unused")
     private boolean iswall(int x, int y) {
-	try {
-	    if (dungeon[x][y] == wall)
-		return true;
-	    return false;
-	} catch (Exception e) {
-	    return false;
-	}
+	return istype(x, y, wall);
+    }
+    private boolean isdoor(int x, int y) {
+	return istype(x, y, door);
     }
     private boolean isused(int x, int y) {
-	try {
-	    if (dungeon[x][y] == wall)
-		return true;
-	    if (dungeon[x][y] == blocked)
+	    if (istype(x, y, wall) || istype(x, y, blocked) || istype(x, y, chest))
 		return true;
 	    return false;
-	} catch (Exception e) {
-	    return false;
-	}
     }
+    
     public void setStart() throws Exception {
 	int c = 0;
 	while(c < 100) {
@@ -319,7 +328,11 @@ public class Generator {
 		    if (isroom(x+1, y)) count++;
 		    if (isroom(x, y+1)) count++;
 		    if (isroom(x, y-1)) count++;
-		    if (count >= 4) {
+		    if (isdoor(x-1, y)) count=0;
+		    if (isdoor(x+1, y)) count=0;
+		    if (isdoor(x, y+1)) count=0;
+		    if (isdoor(x, y-1)) count=0;
+		    if (count == 3) {
 			if (r.nextInt(1000) < chance) setChest(x, y);
 		    }
 		}

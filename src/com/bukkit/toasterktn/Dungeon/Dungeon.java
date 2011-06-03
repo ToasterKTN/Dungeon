@@ -12,17 +12,23 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.bukkit.toasterktn.Dungeon.Block.DungeonBlockListener;
 import com.bukkit.toasterktn.Dungeon.Chunk.ChunckList;
 import com.bukkit.toasterktn.Dungeon.Chunk.ChunkListener;
 import com.bukkit.toasterktn.Dungeon.Config.DungeonConfig;
+import com.bukkit.toasterktn.Dungeon.Generator.Generator;
+import com.bukkit.toasterktn.Dungeon.Player.DungeonPlayerListener;
+import com.bukkit.toasterktn.Dungeon.Thread.SpawnThread;
 
 public class Dungeon extends JavaPlugin {
     // Starts the class
     private ChunkListener chunkListener;
+    private DungeonBlockListener blockListener;
+    private DungeonPlayerListener playerListener;
     public ChunckList oldchunks = new ChunckList();
     public boolean isGenerating = false;
     public File chunkfile;
-
+    public Generator gen = null;
     public static final Logger log = Logger.getLogger("Minecraft");
 
     @Override
@@ -50,13 +56,20 @@ public class Dungeon extends JavaPlugin {
 	chunkfile = new File(getDataFolder(), "chunklist.data");
 	oldchunks.ReadChunkList(chunkfile);
 	chunkListener = new ChunkListener(this);
-	
+	blockListener = new DungeonBlockListener();
+	playerListener = new DungeonPlayerListener(this);
 	this.isGenerating = false;
 		
 	// Register a Chunk Creation, we may want to add a Cache
 	pm.registerEvent(Event.Type.CHUNK_LOAD, this.chunkListener, Event.Priority.Normal, this);
-	// Kill Players on Floor
 	
+	pm.registerEvent(Event.Type.BLOCK_BREAK, this.blockListener, Event.Priority.Normal, this);
+	pm.registerEvent(Event.Type.BLOCK_PLACE, this.blockListener, Event.Priority.Normal, this);
+	
+	pm.registerEvent(Event.Type.PLAYER_INTERACT, this.playerListener, Event.Priority.Normal, this);
+	
+	// Add Monsterspawns
+	getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SpawnThread(this),20,20);
 	// Initialize Autosave
 	//if (DungeonConfig.autosavechunklist) {
 	//    getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SphereWorldSaveThread(this),1200 * DungeonConfig.autosaveinterval, 1200 * DungeonConfig.autosaveinterval);

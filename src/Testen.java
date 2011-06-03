@@ -13,17 +13,17 @@ public class Testen {
 	Generator mygen = new Generator();
 	DungeonConfig.initialize(new File("/tmp/dummy"));
 	mygen.setSize(100,100);
-	mygen.init(1234);
-	mygen.makeRooms(20);
+	mygen.init(12345);
+	mygen.makeRooms(10);
 	mygen.makeWays();
-	mygen.removedeadend(10);
+	mygen.removedeadend(3);
 	try {
 	    mygen.setStart();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    System.out.println("No startpoint found");
 	}
-	mygen.chests(5);
+	mygen.chests(25);
 	//mygen.floodfill();
 	mygen.debug();
 	//mygen.debugdunmask();

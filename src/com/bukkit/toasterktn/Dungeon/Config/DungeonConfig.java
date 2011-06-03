@@ -1,6 +1,8 @@
 package com.bukkit.toasterktn.Dungeon.Config;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DungeonConfig {
 	private static final String settingsFile = "Dungeon.yml";
@@ -14,6 +16,14 @@ public class DungeonConfig {
 	public static int roomchance;
 	public static int chestchance;
 	public static int torchchance;
+	public static int respawntime;
+	public static int rarechance;
+	public static List<String> lootables = new ArrayList<String>();
+	public static List<String> lootablesrare = new ArrayList<String>();
+	private static List<String> defaultlootablesrare = new ArrayList<String>();
+	private static List<String> defaultlootables = new ArrayList<String>();
+	public static int lootablecount;
+	public static int lootstacksize;
 	
 	public static void initialize(File dataFolder) {
 		
@@ -35,6 +45,23 @@ public class DungeonConfig {
 	     	roomchance = config.getInt("roomchance", 80);
 	     	chestchance = config.getInt("chestchance", 5);
 	     	torchchance = config.getInt("torchchance", 50);
+	     	respawntime = config.getInt("respawntime", 50000);
+	     	lootablecount = config.getInt("lootablecount", 5);
+	  	lootstacksize = config.getInt("lootstacksize",10);
+	        Integer[] deflotrares = {310,311,312,313,345,276};
+	        for (int i = 0; i < deflotrares.length; i++) {
+	        	defaultlootablesrare.add(deflotrares[i].toString()+",1");
+			}
+	        
+	        Integer[] deflot = {50,50,50,50,50,50,267,261,306,307,308,309,262,262,262};
+	        for (int i = 0; i < deflot.length; i++) {
+	        	defaultlootables.add(deflot[i].toString()+"," + lootstacksize);
+			}  
+	     	lootables  = config.getStringList("lootables", defaultlootables);
+	     	lootablesrare  = config.getStringList("lootablesrare", defaultlootablesrare);
+	     	rarechance = config.getInt("rarechance", 70);
+	     	
+	     	
 	     	config.save();
 	    }
 }
