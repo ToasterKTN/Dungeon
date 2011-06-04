@@ -1,9 +1,11 @@
 package com.bukkit.toasterktn.Dungeon.Player;
 
 
+import org.bukkit.Location;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.bukkit.toasterktn.Dungeon.Dungeon;
 import com.bukkit.toasterktn.Dungeon.Config.DungeonConfig;
@@ -40,5 +42,10 @@ public class DungeonPlayerListener extends PlayerListener{
 		// TODO: handle exception
 	    }
 	}
+    }
+    @Override
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        // TODO Auto-generated method stub
+     if (event.getPlayer().getWorld().getName().equalsIgnoreCase(DungeonConfig.world)) event.setRespawnLocation(new Location(event.getPlayer().getServer().getWorld(DungeonConfig.world), -30, 4, -30));
     }
 }

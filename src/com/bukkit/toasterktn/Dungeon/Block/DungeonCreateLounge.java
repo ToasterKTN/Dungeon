@@ -81,11 +81,16 @@ public class DungeonCreateLounge {
 	w.getBlockAt(-26 , 4, -34).setTypeId(0x32);
 	w.getBlockAt(-26 , 4, -38).setTypeId(0x32);
 	
-	for (int x = -1 ; x <= 1 ; x++)
+	for (int x = -1 ; x <= 1 ; x++) {
 	    for (int z = -1 ; z <= 1 ; z++) {
-		w.getBlockAt( g1.stopx + x, 2, g1.stopy + z).setTypeId( 0x31);	
-		w.getBlockAt( g2.stopx + x, 42, g2.stopy + z).setTypeId( 0x31);	
-		w.getBlockAt( g3.stopx + x, 82, g3.stopy + z).setTypeId( 0x31);	
+		w.getBlockAt( g1.stopx + x, 1, g1.stopy + z).setTypeId( 0x31);	
+		w.getBlockAt( g2.stopx + x, 41, g2.stopy + z).setTypeId( 0x31);	
+		w.getBlockAt( g3.stopx + x, 81, g3.stopy + z).setTypeId( 0x31);	
 	    }	
+    	}
+    
+    	w.getBlockAt(g1.stopx, 1, g1.stopy ).setTypeId( 0x39);	
+	w.getBlockAt(g2.stopx, 41, g2.stopy).setTypeId( 0x39);	
+	w.getBlockAt(g3.stopx, 81, g3.stopy ).setTypeId( 0x39);	
     }
 }
