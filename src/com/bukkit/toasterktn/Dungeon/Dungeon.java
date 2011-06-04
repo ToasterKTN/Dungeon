@@ -16,6 +16,7 @@ import com.bukkit.toasterktn.Dungeon.Block.DungeonBlockListener;
 import com.bukkit.toasterktn.Dungeon.Chunk.ChunckList;
 import com.bukkit.toasterktn.Dungeon.Chunk.ChunkListener;
 import com.bukkit.toasterktn.Dungeon.Config.DungeonConfig;
+import com.bukkit.toasterktn.Dungeon.Entity.DungeonEntityListener;
 import com.bukkit.toasterktn.Dungeon.Generator.Generator;
 import com.bukkit.toasterktn.Dungeon.Player.DungeonPlayerListener;
 import com.bukkit.toasterktn.Dungeon.Thread.SpawnThread;
@@ -25,6 +26,7 @@ public class Dungeon extends JavaPlugin {
     private ChunkListener chunkListener;
     private DungeonBlockListener blockListener;
     private DungeonPlayerListener playerListener;
+    private DungeonEntityListener entityListener;
     public ChunckList oldchunks = new ChunckList();
     public boolean isGenerating = false;
     public File chunkfile;
@@ -58,6 +60,7 @@ public class Dungeon extends JavaPlugin {
 	chunkListener = new ChunkListener(this);
 	blockListener = new DungeonBlockListener();
 	playerListener = new DungeonPlayerListener(this);
+	entityListener = new DungeonEntityListener();
 	this.isGenerating = false;
 		
 	// Register a Chunk Creation, we may want to add a Cache
@@ -68,6 +71,7 @@ public class Dungeon extends JavaPlugin {
 	
 	pm.registerEvent(Event.Type.PLAYER_INTERACT, this.playerListener, Event.Priority.Normal, this);
 	
+	pm.registerEvent(Event.Type.CREATURE_SPAWN, this.entityListener, Event.Priority.Normal, this);
 	// Add Monsterspawns
 	getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SpawnThread(this),20,20);
 	// Initialize Autosave

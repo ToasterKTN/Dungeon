@@ -27,12 +27,14 @@ public class SpawnPoint {
     {
 	//System.out.println("TrySpawn");
 	if (lastspawn + respawn < new Date().getTime()) {
-	    if (spawnpoint.getX() + 30 > x && spawnpoint.getX() - 30 < x) {
-		if (spawnpoint.getY() + 30 >  y && spawnpoint.getY() - 30 < y) {
+	    if (spawnpoint.getX() + 15 > x && spawnpoint.getX() - 15 < x) {
+		if (spawnpoint.getY() + 15 >  y && spawnpoint.getY() - 15 < y) {
 		    if (spawnpoint.getX() + 20 < s.getWorld(DungeonConfig.world).getSpawnLocation().getX() || spawnpoint.getX() - 20 > s.getWorld(DungeonConfig.world).getSpawnLocation().getX() || spawnpoint.getY() + 20 < s.getWorld(DungeonConfig.world).getSpawnLocation().getZ() || spawnpoint.getY() - 20 > s.getWorld(DungeonConfig.world).getSpawnLocation().getZ()) {
-			lastspawn = new Date().getTime();
+			
+			boolean didspawn=false;
 			for (int k=0;k<count;k++)
-			    s.getWorld(DungeonConfig.world).spawnCreature(new Location(s.getWorld(DungeonConfig.world), this.spawnpoint.getX() -2 + r.nextInt(4), 2, this.spawnpoint.getY() -2 + r.nextInt(4)), this.type);
+			    didspawn=s.getWorld(DungeonConfig.world).spawnCreature(new Location(s.getWorld(DungeonConfig.world), this.spawnpoint.getX() -2 + r.nextInt(4), 2, this.spawnpoint.getY() -2 + r.nextInt(4)), this.type) != null;
+			if (didspawn) lastspawn = new Date().getTime();
 		    }
 		}
 	    }

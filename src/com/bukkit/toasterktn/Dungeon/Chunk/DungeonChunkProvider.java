@@ -74,7 +74,7 @@ public class DungeonChunkProvider implements IChunkProvider {
 		   int l3 = (l * 16 + k) * 128 + 4;
 		   int l4 = (l * 16 + k) * 128 + 5;
 		   int l5 = (l * 16 + k) * 128 + 6;
-		   abyte[l5] = (byte) 0x1;
+		   abyte[l5] = (byte) 0x14;
 		   if (bt == Generator.wall) {
 		       abyte[l1] = (byte) 0x1;
 		       abyte[l2] = (byte) 0x1;
@@ -93,12 +93,12 @@ public class DungeonChunkProvider implements IChunkProvider {
 			   abyte[l2] = (byte) 0x40;
 			   //p.setData(i*16+l, 4,j*16+k,0x08);
 		       }
-		       abyte[l3] = (byte) 0x1;
-		       abyte[l4] = (byte) 0x1;
+		       abyte[l3] = (byte) 0x14;
+		       abyte[l4] = (byte) 0x14;
 		   }
 		   if (bt == Generator.way) {
-		       abyte[l3] = (byte) 0x1;
-		       abyte[l4] = (byte) 0x1;
+		       abyte[l3] = (byte) 0x14;
+		       abyte[l4] = (byte) 0x14;
 		       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
 		   }
 		   if (bt == Generator.free) {
