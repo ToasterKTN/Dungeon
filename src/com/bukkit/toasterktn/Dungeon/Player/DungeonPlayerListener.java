@@ -24,9 +24,16 @@ public class DungeonPlayerListener extends PlayerListener{
 			int x = event.getClickedBlock().getX();
 			int y = event.getClickedBlock().getY();
 			int z = event.getClickedBlock().getZ();
-			for (Treasure t:plugin.gen.getTreasures()) {
-			    t.SpawnBox(event.getPlayer().getWorld(),x, y, z);
-			}
+			if (event.getPlayer().getLocation().getBlockY() < 20)
+			    for (Treasure t:plugin.genlarge.getTreasures()) 
+				t.SpawnBox(event.getPlayer().getWorld(),x, y, z);
+			if (event.getPlayer().getLocation().getBlockY() > 20 && event.getPlayer().getLocation().getBlockY() < 60 )
+			    for (Treasure t:plugin.gennormal.getTreasures()) 
+				t.SpawnBox(event.getPlayer().getWorld(),x, y, z);
+			if (event.getPlayer().getLocation().getBlockY() > 60 )
+			    for (Treasure t:plugin.gensmall.getTreasures()) 
+				t.SpawnBox(event.getPlayer().getWorld(),x, y, z);
+			
 		    }
 		}
 	    } catch (Exception e) {

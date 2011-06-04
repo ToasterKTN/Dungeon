@@ -12,6 +12,7 @@ public class DungeonEntityListener extends EntityListener{
 	if (event.isCancelled()) return;
 	if (event.getLocation().getWorld().getName().equalsIgnoreCase(DungeonConfig.world))
 	    if (event.getCreatureType() == CreatureType.SLIME) event.setCancelled(true);
+	    if (event.getLocation().getBlockX() < 0)  event.setCancelled(true);
+	    if (event.getLocation().getBlockZ() < 0)  event.setCancelled(true);
     }
-
 }

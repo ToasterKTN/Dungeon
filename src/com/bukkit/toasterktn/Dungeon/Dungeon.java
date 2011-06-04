@@ -1,8 +1,11 @@
 package com.bukkit.toasterktn.Dungeon;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.Location;
 import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,12 +16,15 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.bukkit.toasterktn.Dungeon.Block.DungeonBlockListener;
+import com.bukkit.toasterktn.Dungeon.Block.DungeonCreateLounge;
 import com.bukkit.toasterktn.Dungeon.Chunk.ChunckList;
 import com.bukkit.toasterktn.Dungeon.Chunk.ChunkListener;
 import com.bukkit.toasterktn.Dungeon.Config.DungeonConfig;
 import com.bukkit.toasterktn.Dungeon.Entity.DungeonEntityListener;
 import com.bukkit.toasterktn.Dungeon.Generator.Generator;
 import com.bukkit.toasterktn.Dungeon.Player.DungeonPlayerListener;
+import com.bukkit.toasterktn.Dungeon.Player.PlayerPos;
+import com.bukkit.toasterktn.Dungeon.Thread.PortThread;
 import com.bukkit.toasterktn.Dungeon.Thread.SpawnThread;
 
 public class Dungeon extends JavaPlugin {
@@ -28,9 +34,12 @@ public class Dungeon extends JavaPlugin {
     private DungeonPlayerListener playerListener;
     private DungeonEntityListener entityListener;
     public ChunckList oldchunks = new ChunckList();
+    public List<PlayerPos> oldplayerpos = null;
     public boolean isGenerating = false;
     public File chunkfile;
-    public Generator gen = null;
+    public Generator genlarge = null;
+    public Generator gennormal = null;
+    public Generator gensmall = null;
     public static final Logger log = Logger.getLogger("Minecraft");
 
     @Override
@@ -58,9 +67,10 @@ public class Dungeon extends JavaPlugin {
 	chunkfile = new File(getDataFolder(), "chunklist.data");
 	oldchunks.ReadChunkList(chunkfile);
 	chunkListener = new ChunkListener(this);
-	blockListener = new DungeonBlockListener();
+	blockListener = new DungeonBlockListener(this);
 	playerListener = new DungeonPlayerListener(this);
 	entityListener = new DungeonEntityListener();
+
 	this.isGenerating = false;
 		
 	// Register a Chunk Creation, we may want to add a Cache
@@ -74,10 +84,10 @@ public class Dungeon extends JavaPlugin {
 	pm.registerEvent(Event.Type.CREATURE_SPAWN, this.entityListener, Event.Priority.Normal, this);
 	// Add Monsterspawns
 	getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SpawnThread(this),20,20);
-	// Initialize Autosave
-	//if (DungeonConfig.autosavechunklist) {
-	//    getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SphereWorldSaveThread(this),1200 * DungeonConfig.autosaveinterval, 1200 * DungeonConfig.autosaveinterval);
-	//}
+	
+	getServer().getScheduler().scheduleAsyncRepeatingTask(this, new PortThread(this),20,20);
+	oldplayerpos = new ArrayList<PlayerPos>();
+	
 	log.info("[Dungeon] version " + pdfFile.getVersion()
 		+ " is enabled!");
 
@@ -86,6 +96,25 @@ public class Dungeon extends JavaPlugin {
 
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
 
+	if (command.getName().equalsIgnoreCase("dungeon")) {
+	    if (!(sender instanceof Player)) {
+		log.info("This command cannot be used in the console.");
+		return true;
+	    }
+	    Player player = (Player) sender;
+	    //port back to normal
+	    for(PlayerPos p: oldplayerpos) {
+		if (p.isPlayer(player.getName())) {
+		    player.teleport(new Location(getServer().getWorld(p.getWorldName()), p.getX(), p.getY(), p.getZ()));
+		    oldplayerpos.remove(p);
+		    return true;
+		}
+	    }
+	    PlayerPos p = new PlayerPos(player.getName(), player.getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(),  player.getLocation().getBlockZ());
+	    oldplayerpos.add(p);
+	    player.teleport(new Location(getServer().getWorld(DungeonConfig.world), -30, 5, -30));
+	    return true;
+	}
 	if (command.getName().equalsIgnoreCase("regeneratechunk")) {
 	    if (!(sender instanceof Player)) {
 		log.info("This command cannot be used in the console.");
@@ -116,6 +145,20 @@ public class Dungeon extends JavaPlugin {
 			+ player.getLocation().getBlock().getChunk().getZ()
 			+ "!");
 	    }
+	    return true;
+	}
+	
+	if (command.getName().equalsIgnoreCase("initdungeonarea")) {
+	    if (!(sender instanceof Player)) {
+		log.info("This command cannot be used in the console.");
+		return true;
+	    }
+	    Player player = (Player) sender;
+	    if (!player.isOp()) return false;
+	    //this.isGenerating = true;
+	    DungeonCreateLounge.CreateLounge(getServer().getWorld(DungeonConfig.world), genlarge, gennormal,gensmall);
+	    //this.isGenerating = false;
+	    
 	    return true;
 	}
 	return false;

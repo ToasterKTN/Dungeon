@@ -32,20 +32,64 @@ public class DungeonChunkProvider implements IChunkProvider {
 	this.p = world;
 	this.r = new Random(i);
 	this.plugin = instance;
-	plugin.gen = new Generator();
-	plugin.gen.setSize(DungeonConfig.worldsize, DungeonConfig.worldsize);
-	plugin.gen.init(i);
-	plugin.gen.makeRooms(DungeonConfig.maxroomsize);
-	plugin.gen.makeWays();
-	plugin.gen.removedeadend(DungeonConfig.removedeads);
+	plugin.genlarge = new Generator();
+	plugin.genlarge.setSize(DungeonConfig.genlarge, DungeonConfig.genlarge);
+	plugin.genlarge.init(i);
+	plugin.genlarge.makeRooms(DungeonConfig.maxroomsize);
+	plugin.genlarge.makeWays();
+	plugin.genlarge.removedeadend(DungeonConfig.removedeads);
 	try {
-	    plugin.gen.setStart();
+	    plugin.genlarge.setStart();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	plugin.gen.chests(DungeonConfig.chestchance);	
-	plugin.gen.makeSpawns(DungeonConfig.respawntime);
-	plugin.getServer().getWorld(DungeonConfig.world).setSpawnLocation(plugin.gen.startx,3,plugin.gen.starty);
+	plugin.genlarge.chests(DungeonConfig.chestchance,0);	
+	plugin.genlarge.makeSpawns(DungeonConfig.respawntime, 0);
+	try {
+	    plugin.genlarge.setStop();
+	} catch (Exception e1) {
+	    e1.printStackTrace();
+	}
+	
+	plugin.gennormal = new Generator();
+	plugin.gennormal.setSize(DungeonConfig.gennormal, DungeonConfig.gennormal);
+	plugin.gennormal.init(i);
+	plugin.gennormal.makeRooms(DungeonConfig.maxroomsize);
+	plugin.gennormal.makeWays();
+	plugin.gennormal.removedeadend(DungeonConfig.removedeads);
+	try {
+	    plugin.gennormal.setStart();
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	plugin.gennormal.chests(DungeonConfig.chestchance, 40);	
+	plugin.gennormal.makeSpawns(DungeonConfig.respawntime, 40);
+	try {
+	    plugin.gennormal.setStop();
+	} catch (Exception e1) {
+	    e1.printStackTrace();
+	}
+	
+	
+	plugin.gensmall = new Generator();
+	plugin.gensmall.setSize(DungeonConfig.gensmall, DungeonConfig.gensmall);
+	plugin.gensmall.init(i);
+	plugin.gensmall.makeRooms(DungeonConfig.maxroomsize);
+	plugin.gensmall.makeWays();
+	plugin.gensmall.removedeadend(DungeonConfig.removedeads);
+	try {
+	    plugin.gensmall.setStart();
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	plugin.gensmall.chests(DungeonConfig.chestchance, 80);	
+	plugin.gensmall.makeSpawns(DungeonConfig.respawntime, 80);	
+	try {
+	    plugin.gensmall.setStop();
+	} catch (Exception e1) {
+	    e1.printStackTrace();
+	}
+	plugin.getServer().getWorld(DungeonConfig.world).setSpawnLocation(-30,4,-30);
     }
 
   
@@ -66,20 +110,22 @@ public class DungeonChunkProvider implements IChunkProvider {
 	    for (int l = 0; l < 16; ++l) {
 		int l1 = (l * 16 + k) * 128;
 		abyte[l1] = (byte) 7;
+		// **********   LARGE *******
+		
 		try {
-		   byte bt = plugin.gen.dungeon[i * 16 + l][j * 16 + k];
+		   byte bt = plugin.genlarge.dungeon[i * 16 + l][j * 16 + k];
 		   abyte[(l * 16 + k) * 128 + 1] = 0x2D;
 		   l1 = (l * 16 + k) * 128 + 2;
 		   int l2 = (l * 16 + k) * 128 + 3;
 		   int l3 = (l * 16 + k) * 128 + 4;
 		   int l4 = (l * 16 + k) * 128 + 5;
 		   int l5 = (l * 16 + k) * 128 + 6;
-		   abyte[l5] = (byte) 0x14;
+		   abyte[l5] = (byte) 0x16;
 		   if (bt == Generator.wall) {
-		       abyte[l1] = (byte) 0x1;
-		       abyte[l2] = (byte) 0x1;
-		       abyte[l3] = (byte) 0x1;
-		       abyte[l4] = (byte) 0x1;
+		       abyte[l1] = (byte) 0x30;
+		       abyte[l2] = (byte) 0x30;
+		       abyte[l3] = (byte) 0x30;
+		       abyte[l4] = (byte) 0x30;
 		   }
 		   if (bt == Generator.blocked) {
 		       abyte[l1] = (byte) 0x7;
@@ -93,12 +139,12 @@ public class DungeonChunkProvider implements IChunkProvider {
 			   abyte[l2] = (byte) 0x40;
 			   //p.setData(i*16+l, 4,j*16+k,0x08);
 		       }
-		       abyte[l3] = (byte) 0x14;
-		       abyte[l4] = (byte) 0x14;
+		       abyte[l3] = (byte) 0x30;
+		       abyte[l4] = (byte) 0x30;
 		   }
 		   if (bt == Generator.way) {
-		       abyte[l3] = (byte) 0x14;
-		       abyte[l4] = (byte) 0x14;
+		       abyte[l3] = (byte) 0x30;
+		       abyte[l4] = (byte) 0x30;
 		       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
 		   }
 		   if (bt == Generator.free) {
@@ -111,6 +157,109 @@ public class DungeonChunkProvider implements IChunkProvider {
 		} catch (Exception e) {
 		   // Nothing todo
 		}
+		
+		
+		// *********** NORMAL ********
+		try {
+			   byte bt = plugin.gennormal.dungeon[i * 16 + l][j * 16 + k];
+			   l1 = (l * 16 + k) * 128 + 40;
+			   abyte[l1] = (byte) 7;
+			   abyte[(l * 16 + k) * 128 + 1+ 40] = 0x4;
+			   l1 = (l * 16 + k) * 128 + 2+ 40;
+			   int l2 = (l * 16 + k) * 128 + 3+ 40;
+			   int l3 = (l * 16 + k) * 128 + 4+ 40;
+			   int l4 = (l * 16 + k) * 128 + 5+ 40;
+			   int l5 = (l * 16 + k) * 128 + 6+ 40;
+			   abyte[l5] = (byte) 0x05;
+			   if (bt == Generator.wall) {
+			       abyte[l1] = (byte) 0x4;
+			       abyte[l2] = (byte) 0x4;
+			       abyte[l3] = (byte) 0x59;
+			       abyte[l4] = (byte) 0x1;
+			   }
+			   if (bt == Generator.blocked) {
+			       abyte[l1] = (byte) 0x7;
+			       abyte[l2] = (byte) 0x7;
+			       abyte[l3] = (byte) 0x7;
+			       abyte[l4] = (byte) 0x7;
+			   }
+			   if (bt == Generator.door) {
+			       if (r.nextInt(5)==1) {
+				   abyte[l1] = (byte) 0x40;
+				   abyte[l2] = (byte) 0x40;
+				   //p.setData(i*16+l, 4,j*16+k,0x08);
+			       }
+			       abyte[l3] = (byte) 0x59;
+			       abyte[l4] = (byte) 0x04;
+			   }
+			   if (bt == Generator.way) {
+			       abyte[l3] = (byte) 0x04;
+			       abyte[l4] = (byte) 0x04;
+			       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+			   }
+			   if (bt == Generator.free) {
+			       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+			   }
+			   if (bt == Generator.chest) {
+			       abyte[l1] = Generator.chest;
+			       //plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new DungeonCreateLootThread(plugin,i * 16 + l,2,j * 16 + k),r.nextInt(1200));
+			   }
+			} catch (Exception e) {
+			   // Nothing todo
+			}
+			
+			
+			
+			//************** SMALL *********
+			
+			try {
+				   byte bt = plugin.gensmall.dungeon[i * 16 + l][j * 16 + k];
+				   l1 = (l * 16 + k) * 128 + 80;
+				   abyte[l1] = (byte) 7;
+				   abyte[(l * 16 + k) * 128 + 1+ 80] = 0x2D;
+				   l1 = (l * 16 + k) * 128 + 2 + 80;
+				   int l2 = (l * 16 + k) * 128 + 3+ 80;
+				   int l3 = (l * 16 + k) * 128 + 4+ 80;
+				   int l4 = (l * 16 + k) * 128 + 5+ 80;
+				   int l5 = (l * 16 + k) * 128 + 6+ 80;
+				   abyte[l5] = (byte) 0x59;
+				   if (bt == Generator.wall) {
+				       abyte[l1] = (byte) 0x1;
+				       abyte[l2] = (byte) 0x1;
+				       abyte[l3] = (byte) 0x2B;
+				       abyte[l4] = (byte) 0x1;
+				   }
+				   if (bt == Generator.blocked) {
+				       abyte[l1] = (byte) 0x7;
+				       abyte[l2] = (byte) 0x7;
+				       abyte[l3] = (byte) 0x7;
+				       abyte[l4] = (byte) 0x7;
+				   }
+				   if (bt == Generator.door) {
+				       if (r.nextInt(5)==1) {
+					   abyte[l1] = (byte) 0x40;
+					   abyte[l2] = (byte) 0x40;
+					   //p.setData(i*16+l, 4,j*16+k,0x08);
+				       }
+				       abyte[l3] = (byte) 0x2B;
+				       abyte[l4] = (byte) 0x59;
+				   }
+				   if (bt == Generator.way) {
+				       //abyte[l3] = (byte) 0x14;
+				       abyte[l4] = (byte) 0x59;
+				       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+				   }
+				   if (bt == Generator.free) {
+				       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+				   }
+				   if (bt == Generator.chest) {
+				       abyte[l1] = Generator.chest;
+				       //plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new DungeonCreateLootThread(plugin,i * 16 + l,2,j * 16 + k),r.nextInt(1200));
+				   }
+				} catch (Exception e) {
+				   // Nothing todo
+				}	
+		
 	    } 
 	}
 	plugin.oldchunks.AddChunkToList(DungeonConfig.world,i,j);

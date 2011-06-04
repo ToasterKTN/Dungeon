@@ -6,6 +6,7 @@ import com.bukkit.toasterktn.Dungeon.Dungeon;
 import com.bukkit.toasterktn.Dungeon.Config.DungeonConfig;
 import com.bukkit.toasterktn.Dungeon.Generator.SpawnPoint;
 
+
 public class SpawnThread implements Runnable {
     private Dungeon plugin;
 
@@ -36,9 +37,16 @@ public class SpawnThread implements Runnable {
 	    for (Player p : plugin.getServer().getOnlinePlayers()) {
 		if(p.getWorld().getName().equalsIgnoreCase(DungeonConfig.world)) {
 		    double x = p.getLocation().getX();
-		    double y = p.getLocation().getZ();
-		    for (SpawnPoint s : plugin.gen.getSpawnPoints()) {
-			s.TrySpawn(plugin.getServer(), x, y);
+		    double y = p.getLocation().getY();
+		    double z = p.getLocation().getZ();
+		    for (SpawnPoint s : plugin.genlarge.getSpawnPoints()) {
+			s.TrySpawn(plugin.getServer(), x, y, z);
+		    }
+		    for (SpawnPoint s : plugin.gennormal.getSpawnPoints()) {
+			s.TrySpawn(plugin.getServer(), x, y, z);
+		    }
+		    for (SpawnPoint s : plugin.gensmall.getSpawnPoints()) {
+			s.TrySpawn(plugin.getServer(), x, y, z);
 		    }
 		}
 	    }

@@ -27,6 +27,7 @@ public class Generator {
     private List<SpawnPoint> spawns = null; 
     private List<Treasure> treasures = null;
     public int startx, starty;
+    public int stopx, stopy;
 
     public void setSize(int x, int y) {
 	this.x = x;
@@ -71,12 +72,12 @@ public class Generator {
 	    }
 	}
     }
-    public void makeSpawns(int respawn) {
+    public void makeSpawns(int respawn, int offset) {
 	for (Room ro:rooms) {
-	    if (r.nextInt(5)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(), ro.getCenter().getY(), respawn, CreatureType.ZOMBIE, 5));
-	    if (r.nextInt(6)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(), ro.getCenter().getY(), respawn, CreatureType.PIG_ZOMBIE, 5));
-	    if (r.nextInt(5)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(), ro.getCenter().getY(), respawn, CreatureType.SKELETON, 5));
-	    if (r.nextInt(8)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(), ro.getCenter().getY(), respawn, CreatureType.SPIDER, 5));
+	    if (r.nextInt(5)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(),2 + offset ,ro.getCenter().getY(), respawn, CreatureType.ZOMBIE, 5));
+	    if (r.nextInt(6)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(),2 + offset ,ro.getCenter().getY(), respawn, CreatureType.PIG_ZOMBIE, 5));
+	    if (r.nextInt(5)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(),2 + offset ,ro.getCenter().getY(), respawn, CreatureType.SKELETON, 5));
+	    if (r.nextInt(8)==1) spawns.add(new SpawnPoint(ro.getCenter().getX(),2 + offset ,ro.getCenter().getY(), respawn, CreatureType.SPIDER, 5));
 	}
     }
 
@@ -240,9 +241,9 @@ public class Generator {
     private void setWall(int x, int y) {
 	dungeon[x][y] = wall;
     }
-    private void setChest(int x, int y) {
-	dungeon[x][y] = chest;
-	treasures.add(new Treasure(x, 2, y, DungeonConfig.respawntime));
+    private void setChest(int x, int y, int z) {
+	dungeon[x][z] = chest;
+	treasures.add(new Treasure(x, y, z, DungeonConfig.respawntime));
     }
     
     private boolean istype(int x, int y, byte type) {
@@ -279,13 +280,40 @@ public class Generator {
     
     public void setStart() throws Exception {
 	int c = 0;
-	while(c < 100) {
+	while(c < 1000) {
 	    startx = r.nextInt(this.x);
 	    starty = r.nextInt(this.y);
-	    if (dungeon[startx][starty] == free) return;
+	    if (dungeon[startx][starty] == free &&
+			dungeon[startx+1][starty+1] == free &&
+			dungeon[startx+1][starty] == free &&
+			dungeon[startx+1][starty-1] == free &&
+			dungeon[startx][starty+1] == free &&
+			dungeon[startx][starty-1] == free &&
+			dungeon[startx-1][starty+1] == free &&
+			dungeon[startx-1][starty] == free &&
+			dungeon[startx-1][starty-1] == free ) return;
 	    c++;
 	}
 	throw new Exception("No startpoint found");
+    }
+    
+    public void setStop() throws Exception {
+	int c = 0;
+	while(c < 1000) {
+	    stopx = r.nextInt(this.x);
+	    stopy = r.nextInt(this.y);
+	    if (dungeon[stopx][stopy] == free &&
+		dungeon[stopx+1][stopy+1] == free &&
+		dungeon[stopx+1][stopy] == free &&
+		dungeon[stopx+1][stopy-1] == free &&
+		dungeon[stopx][stopy+1] == free &&
+		dungeon[stopx][stopy-1] == free &&
+		dungeon[stopx-1][stopy+1] == free &&
+		dungeon[stopx-1][stopy] == free &&
+		dungeon[stopx-1][stopy-1] == free) return;
+	    c++;
+	}
+	throw new Exception("No stoppoint found");
     }
     
     public void floodfill() {
@@ -318,7 +346,7 @@ public class Generator {
 	} 
     }
     
-    public void chests(int chance) 
+    public void chests(int chance, int offset) 
     {
 	for (int x = 1; x < this.x - 1;x++) {
 	    for (int y = 1; y < this.y - 1; y++) {
@@ -333,7 +361,7 @@ public class Generator {
 		    if (isdoor(x, y+1)) count=0;
 		    if (isdoor(x, y-1)) count=0;
 		    if (count == 3) {
-			if (r.nextInt(1000) < chance) setChest(x, y);
+			if (r.nextInt(1000) < chance) setChest(x, 2 + offset ,y);
 		    }
 		}
 	    }

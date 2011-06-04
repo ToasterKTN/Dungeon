@@ -23,7 +23,7 @@ public class Testen {
 	    e.printStackTrace();
 	    System.out.println("No startpoint found");
 	}
-	mygen.chests(25);
+	mygen.chests(25,0);
 	//mygen.floodfill();
 	mygen.debug();
 	//mygen.debugdunmask();

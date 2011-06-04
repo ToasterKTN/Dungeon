@@ -8,3 +8,13 @@ commands:
       aliases: 
          - regc
          - cr
+   dungeon:
+      description: Ports you in the Dungeon world.
+      usage: /<command>
+      aliases:
+         - dp
+   initdungeonarea:
+      description: create the Start Area for the Dungeons.
+      usage: /<command>
+      aliases:
+         - initdun
