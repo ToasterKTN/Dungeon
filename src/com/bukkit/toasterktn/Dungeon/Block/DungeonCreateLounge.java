@@ -8,6 +8,10 @@ public class DungeonCreateLounge {
     public static void CreateLounge(World w , Generator g1, Generator g2, Generator g3) {
 	for (int x = -20 ; x >= -40 ; x--)
 	    for (int y = -20 ; y >= -40 ; y--)
+		for (int k=1 ; k < 11; k++)
+		    w.getBlockAt(x , k, y).setTypeId(0x0);
+	for (int x = -20 ; x >= -40 ; x--)
+	    for (int y = -20 ; y >= -40 ; y--)
 		w.getBlockAt(x , 1, y).setTypeId(0x3);
 	for (int x = -20 ; x >= -40 ; x--)
 	    for (int y = -20 ; y >= -40 ; y--)

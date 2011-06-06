@@ -2,6 +2,7 @@ package com.bukkit.toasterktn.Dungeon.Player;
 
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -37,6 +38,14 @@ public class DungeonPlayerListener extends PlayerListener{
 				t.SpawnBox(event.getPlayer().getWorld(),x, y, z);
 			
 		    }
+		    if (event.getAction().equals(Action.RIGHT_CLICK_AIR) && event.getPlayer().getItemInHand().getType().equals(Material.COMPASS)) {
+			if (event.getPlayer().getLocation().getBlockY() < 20)
+			   event.getPlayer().setCompassTarget(new Location(event.getPlayer().getWorld(), plugin.genlarge.stopx, 3, plugin.genlarge.stopy ));
+			if (event.getPlayer().getLocation().getBlockY() > 20 && event.getPlayer().getLocation().getBlockY() < 60 )
+			    event.getPlayer().setCompassTarget(new Location(event.getPlayer().getWorld(), plugin.gennormal.stopx, 3, plugin.gennormal.stopy ));
+			if (event.getPlayer().getLocation().getBlockY() > 60 )
+			    event.getPlayer().setCompassTarget(new Location(event.getPlayer().getWorld(), plugin.gensmall.stopx, 3, plugin.gensmall.stopy ));
+		    }
 		}
 	    } catch (Exception e) {
 		// TODO: handle exception
@@ -45,7 +54,8 @@ public class DungeonPlayerListener extends PlayerListener{
     }
     @Override
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        // TODO Auto-generated method stub
-     if (event.getPlayer().getWorld().getName().equalsIgnoreCase(DungeonConfig.world)) event.setRespawnLocation(new Location(event.getPlayer().getServer().getWorld(DungeonConfig.world), -30, 4, -30));
+	System.out.println("Respawn Event called");
+	for (PlayerPos pp: plugin.oldplayerpos)
+	    if (pp.isPlayer(event.getPlayer().getName())) event.setRespawnLocation(new Location(event.getPlayer().getServer().getWorld(DungeonConfig.world), -30, 4, -30));
     }
 }

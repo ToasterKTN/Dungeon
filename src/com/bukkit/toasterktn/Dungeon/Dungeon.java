@@ -79,12 +79,13 @@ public class Dungeon extends JavaPlugin {
 	pm.registerEvent(Event.Type.BLOCK_PLACE, this.blockListener, Event.Priority.Normal, this);
 	pm.registerEvent(Event.Type.PLAYER_INTERACT, this.playerListener, Event.Priority.Normal, this);
 	pm.registerEvent(Event.Type.CREATURE_SPAWN, this.entityListener, Event.Priority.Normal, this);
-	pm.registerEvent(Event.Type.PLAYER_RESPAWN, this.playerListener, Event.Priority.Normal, this);
+	pm.registerEvent(Event.Type.PLAYER_RESPAWN, this.playerListener, Event.Priority.High, this);
 	pm.registerEvent(Event.Type.ENTITY_EXPLODE, this.entityListener, Event.Priority.Normal, this);
 	// Add Monsterspawns
 	getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SpawnThread(this),20,20);
-	
+	// Add Porterthread
 	getServer().getScheduler().scheduleAsyncRepeatingTask(this, new PortThread(this),20,20);
+	
 	oldplayerpos = new ArrayList<PlayerPos>();
 	
 	log.info("[Dungeon] version " + pdfFile.getVersion()

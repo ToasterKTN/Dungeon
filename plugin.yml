@@ -1,6 +1,6 @@
 name: Dungeon
 main: com.bukkit.toasterktn.Dungeon.Dungeon
-version: 0.1
+version: 0.5
 commands: 
    regeneratechunk:
       description: Regen a Chunk

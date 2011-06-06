@@ -21,17 +21,20 @@ public class PortThread implements Runnable{
 		  if (p.getLocation().getBlockX() < -33 && p.getLocation().getBlockX() > -38) {
 		      if (p.getLocation().getBlockZ() < -33 && p.getLocation().getBlockZ() > -38) {
 			  p.teleport(new Location(plugin.getServer().getWorld(DungeonConfig.world), plugin.genlarge.startx, 3, plugin.genlarge.starty));
+			  p.setCompassTarget(new Location(plugin.getServer().getWorld(DungeonConfig.world), plugin.genlarge.stopx, 3, plugin.genlarge.stopy));
 		      }
 		  }
 		
 		  if (p.getLocation().getBlockX() < -23 && p.getLocation().getBlockX() > -26) {
 		      if (p.getLocation().getBlockZ() < -23 && p.getLocation().getBlockZ() > -26) {
 			  p.teleport(new Location(plugin.getServer().getWorld(DungeonConfig.world), plugin.gennormal.startx, 43, plugin.gennormal.starty));
+			  p.setCompassTarget(new Location(plugin.getServer().getWorld(DungeonConfig.world), plugin.gennormal.stopx, 3, plugin.gennormal.stopy));
 		      }
 		  }
 		  if (p.getLocation().getBlockX() < -33 && p.getLocation().getBlockX() > -38) {
 		      if (p.getLocation().getBlockZ() < -23 && p.getLocation().getBlockZ() > -26) {
 			  p.teleport(new Location(plugin.getServer().getWorld(DungeonConfig.world), plugin.gensmall.startx, 83, plugin.gensmall.starty));
+			  p.setCompassTarget(new Location(plugin.getServer().getWorld(DungeonConfig.world), plugin.gensmall.stopx, 3, plugin.gensmall.stopy));
 		      }
 		  }
 		  if (p.getLocation().getBlockX() < -23 && p.getLocation().getBlockX() > -26) {
@@ -62,9 +65,7 @@ public class PortThread implements Runnable{
 			      p.teleport(new Location(plugin.getServer().getWorld(DungeonConfig.world),-30, 4, -30));
 			  }
 		      }
-		  }
-		  
-		  
+		  }		  
 		}
 	    }
 	} catch (Exception e) {
