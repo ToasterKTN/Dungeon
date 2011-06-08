@@ -65,7 +65,10 @@ public class PortThread implements Runnable{
 			      p.teleport(new Location(plugin.getServer().getWorld(DungeonConfig.world),-30, 4, -30));
 			  }
 		      }
-		  }		  
+		  }
+		  if (p.getLocation().getBlockY() > 100) {
+		      p.teleport(new Location(plugin.getServer().getWorld(DungeonConfig.world),-30, 4, -30));	
+		  }	
 		}
 	    }
 	} catch (Exception e) {

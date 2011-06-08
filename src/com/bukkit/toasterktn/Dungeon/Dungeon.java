@@ -16,7 +16,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.bukkit.toasterktn.Dungeon.Block.DungeonBlockListener;
-import com.bukkit.toasterktn.Dungeon.Block.DungeonCreateLounge;
+import com.bukkit.toasterktn.Dungeon.Block.DungeonBlockModifier;
 import com.bukkit.toasterktn.Dungeon.Chunk.ChunckList;
 import com.bukkit.toasterktn.Dungeon.Chunk.ChunkListener;
 import com.bukkit.toasterktn.Dungeon.Config.DungeonConfig;
@@ -79,8 +79,9 @@ public class Dungeon extends JavaPlugin {
 	pm.registerEvent(Event.Type.BLOCK_PLACE, this.blockListener, Event.Priority.Normal, this);
 	pm.registerEvent(Event.Type.PLAYER_INTERACT, this.playerListener, Event.Priority.Normal, this);
 	pm.registerEvent(Event.Type.CREATURE_SPAWN, this.entityListener, Event.Priority.Normal, this);
-	pm.registerEvent(Event.Type.PLAYER_RESPAWN, this.playerListener, Event.Priority.High, this);
+	//pm.registerEvent(Event.Type.PLAYER_RESPAWN, this.playerListener, Event.Priority.High, this);
 	pm.registerEvent(Event.Type.ENTITY_EXPLODE, this.entityListener, Event.Priority.Normal, this);
+	
 	// Add Monsterspawns
 	getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SpawnThread(this),20,20);
 	// Add Porterthread
@@ -156,7 +157,22 @@ public class Dungeon extends JavaPlugin {
 	    Player player = (Player) sender;
 	    if (!player.isOp()) return false;
 	    //this.isGenerating = true;
-	    DungeonCreateLounge.CreateLounge(getServer().getWorld(DungeonConfig.world), genlarge, gennormal,gensmall);
+	    DungeonBlockModifier.CreateLounge(getServer().getWorld(DungeonConfig.world), genlarge, gennormal,gensmall);
+	    //this.isGenerating = false;
+	    
+	    return true;
+	}
+	
+	if (command.getName().equalsIgnoreCase("cleanupdungeon")) {
+	    if (!(sender instanceof Player)) {
+		log.info("This command cannot be used in the console.");
+		return true;
+	    }
+	    Player player = (Player) sender;
+	    if (!player.isOp()) return false;
+	    //this.isGenerating = true;
+	    // TODO Crashes the Server.. Needs improvment
+	    //DungeonBlockModifier.Cleanup(getServer().getWorld(DungeonConfig.world), DungeonConfig.genlarge);
 	    //this.isGenerating = false;
 	    
 	    return true;

@@ -163,14 +163,14 @@ public class DungeonChunkProvider implements IChunkProvider {
 		       abyte[l2] = (byte) 0x0;
 		       abyte[l3] = (byte) 0x30;
 		       abyte[l4] = (byte) 0x30;
-		       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+		       //if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
 		   }
 		   if (bt == Generator.free) {
 		       abyte[l1] = (byte) 0x0;
 		       abyte[l2] = (byte) 0x0;
 		       abyte[l3] = (byte) 0x0;
 		       abyte[l4] = (byte) 0x0;
-		       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+		       //if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
 		   }
 		   if (bt == Generator.chest) {
 		       abyte[l1] = Generator.chest;
@@ -228,14 +228,14 @@ public class DungeonChunkProvider implements IChunkProvider {
 			       abyte[l2] = (byte) 0x0;
 			       abyte[l3] = (byte) 0x04;
 			       abyte[l4] = (byte) 0x04;
-			       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+			       //if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
 			   }
 			   if (bt == Generator.free) {
 			       abyte[l1] = (byte) 0x0;
 			       abyte[l2] = (byte) 0x0;
 			       abyte[l3] = (byte) 0x0;
 			       abyte[l4] = (byte) 0x0;
-			       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+			       //if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
 			   }
 			   if (bt == Generator.chest) {
 			       abyte[l1] = Generator.chest;
@@ -292,14 +292,14 @@ public class DungeonChunkProvider implements IChunkProvider {
 				       abyte[l2] = (byte) 0x0;
 				       abyte[l3] = (byte) 0x0;
 				       abyte[l4] = (byte) 0x59;
-				       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+				       //if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
 				   }
 				   if (bt == Generator.free) {
 				       abyte[l1] = (byte) 0x0;
 				       abyte[l2] = (byte) 0x0;
 				       abyte[l3] = (byte) 0x0;
 				       abyte[l4] = (byte) 0x0;
-				       if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
+				       //if (r.nextInt(DungeonConfig.torchchance) == 1) abyte[l1] = 50;
 				   }
 				   if (bt == Generator.chest) {
 				       abyte[l1] = Generator.chest;

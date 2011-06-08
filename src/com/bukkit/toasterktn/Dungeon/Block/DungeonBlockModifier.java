@@ -1,10 +1,19 @@
 package com.bukkit.toasterktn.Dungeon.Block;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 
 import com.bukkit.toasterktn.Dungeon.Generator.Generator;
 
-public class DungeonCreateLounge {
+public class DungeonBlockModifier {
+    public static void Cleanup(World w , int maxsize) {
+	for (int x = 0 ; x <= maxsize ; x++)
+	    for (int y = 0 ; y <= maxsize ; y++)
+		for (int k=1 ; k < 128; k++) {
+		    if (w.getBlockAt(x, k, y).getType() == Material.TORCH) w.getBlockAt(x,k,y).setType(Material.AIR);
+		}
+    }
+    
     public static void CreateLounge(World w , Generator g1, Generator g2, Generator g3) {
 	for (int x = -20 ; x >= -40 ; x--)
 	    for (int y = -20 ; y >= -40 ; y--)

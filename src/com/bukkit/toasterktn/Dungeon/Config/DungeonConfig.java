@@ -41,7 +41,7 @@ public class DungeonConfig {
 	        BetterConfig config = new BetterConfig(configFile);
 	        config.load();
 	     	
-	     	world  = config.getString("world", "sphere");
+	     	world  = config.getString("world", "dungeon");
 	     	exitworld  = config.getString("exitworld", "world");
 	     	exitx = config.getInt("exitx",0);
 	     	exity = config.getInt("exity",70);

@@ -1,6 +1,6 @@
 name: Dungeon
 main: com.bukkit.toasterktn.Dungeon.Dungeon
-version: 0.5
+version: 0.5b
 commands: 
    regeneratechunk:
       description: Regen a Chunk
@@ -18,3 +18,8 @@ commands:
       usage: /<command>
       aliases:
          - initdun
+   cleanupdungeon:
+      description: Removes all Torches from the Dungeon.
+      usage: /<command>
+      aliases:
+         - cleandun
