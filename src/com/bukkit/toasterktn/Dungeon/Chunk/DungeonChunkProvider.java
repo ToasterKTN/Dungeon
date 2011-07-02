@@ -27,6 +27,9 @@ public class DungeonChunkProvider implements IChunkProvider {
     double[] h;
     int[][] i = new int[32][32];
  
+    public boolean canSave() {
+	return false;
+    }
 
     public DungeonChunkProvider(World world, long i, Dungeon instance) {
 	this.p = world;
@@ -315,7 +318,7 @@ public class DungeonChunkProvider implements IChunkProvider {
 	    } 
 	}
 	plugin.oldchunks.AddChunkToList(DungeonConfig.world,i,j);
-	chunk.b();
+	chunk.initLighting();
 	return chunk;
     }
 	
